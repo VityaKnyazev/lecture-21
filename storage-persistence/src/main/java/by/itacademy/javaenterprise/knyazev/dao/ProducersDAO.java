@@ -6,6 +6,7 @@ import java.util.List;
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
 import javax.persistence.PersistenceException;
+import javax.transaction.Transactional;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -21,19 +22,12 @@ public class ProducersDAO implements DAO<Producer>{
 	private EntityManager entityManager;
 
 	@Override
+	@Transactional
 	public Long save(Producer producer) throws DAOException {
+		
 		if (producer != null) {
-			try {
-				entityManager.getTransaction().begin();
-				entityManager.persist(producer);
-				entityManager.getTransaction().commit();
-				return producer.getId();
-			} catch (Exception e) {
-				entityManager.getTransaction().rollback();
-				logger.error("Transaction on method int save(Producer producer) failed: " + e.getMessage()
-						+ "with name of class exception: " + e.getClass().getCanonicalName(), e);
-				return null;
-			}
+			entityManager.persist(producer);
+			return producer.getId();
 		} else {
 			throw new DAOException(
 					"Expected Producer object. Null was given in method Long save(Producer producer)");
@@ -72,30 +66,24 @@ public class ProducersDAO implements DAO<Producer>{
 	}
 
 	@Override
+	@Transactional
 	public void update(Producer producer) throws DAOException {
-		try {
-			entityManager.getTransaction().begin();
+		
+		if (producer != null && producer.getId() > 0) {
 			entityManager.merge(producer);
-			entityManager.getTransaction().commit();
-		} catch (IllegalStateException | IllegalArgumentException | PersistenceException e) {
-			entityManager.getTransaction().rollback();
-			logger.error("Error in method update(Producer producer): " + e.getMessage() + " from class exception name: "
-					+ e.getClass().getCanonicalName());
-			throw new DAOException("Error can't merge object on method void update(Producer producer)", e);
+		} else {
+			throw new DAOException("Error can't merge object on method void update(Producer producer)");
 		}
 	}
 
 	@Override
-	public void delete(Producer Producer) throws DAOException {
-		try {
-			entityManager.getTransaction().begin();
-			entityManager.remove(Producer);
-			entityManager.getTransaction().commit();
-		} catch (IllegalStateException | IllegalArgumentException | PersistenceException e) {
-			entityManager.getTransaction().rollback();
-			logger.error("Error in method void delete(Producer producer): " + e.getMessage()
-					+ " from class exception name: " + e.getClass().getCanonicalName());
-			throw new DAOException("Error can't remove object on method void delete(Producer producer)", e);
+	@Transactional
+	public void delete(Producer producer) throws DAOException {
+		
+		if (producer != null && producer.getId() > 0) {
+			entityManager.remove(producer);
+		} else {
+			throw new DAOException("Error can't remove object on method void delete(Producer producer)");
 		}
 	}
 

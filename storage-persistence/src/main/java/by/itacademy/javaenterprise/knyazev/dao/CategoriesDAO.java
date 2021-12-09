@@ -6,6 +6,7 @@ import java.util.List;
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
 import javax.persistence.PersistenceException;
+import javax.transaction.Transactional;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -21,19 +22,11 @@ public class CategoriesDAO implements DAO<Category>{
 	private EntityManager entityManager;
 
 	@Override
+	@Transactional
 	public Long save(Category category) throws DAOException {
 		if (category != null) {
-			try {
-				entityManager.getTransaction().begin();
-				entityManager.persist(category);
-				entityManager.getTransaction().commit();
-				return category.getId();
-			} catch (Exception e) {
-				entityManager.getTransaction().rollback();
-				logger.error("Transaction on method int save(Category category) failed: " + e.getMessage()
-						+ "with name of class exception: " + e.getClass().getCanonicalName(), e);
-				return null;
-			}
+			entityManager.persist(category);
+			return category.getId();
 		} else {
 			throw new DAOException(
 					"Expected Category object. Null was given in method Long save(Category category)");
@@ -72,30 +65,24 @@ public class CategoriesDAO implements DAO<Category>{
 	}
 
 	@Override
-	public void update(Category category) throws DAOException {
-		try {
-			entityManager.getTransaction().begin();
+	@Transactional
+	public void update(Category category) throws DAOException {	
+		
+		if (category != null && category.getId() > 0) {
 			entityManager.merge(category);
-			entityManager.getTransaction().commit();
-		} catch (IllegalStateException | IllegalArgumentException | PersistenceException e) {
-			entityManager.getTransaction().rollback();
-			logger.error("Error in method update(Category category): " + e.getMessage() + " from class exception name: "
-					+ e.getClass().getCanonicalName());
-			throw new DAOException("Error can't merge object on method void update(Category category)", e);
+		} else {
+			throw new DAOException("Error can't merge object on method void update(Category category)");
 		}
 	}
 
 	@Override
+	@Transactional
 	public void delete(Category category) throws DAOException {
-		try {
-			entityManager.getTransaction().begin();
+		
+		if (category != null && category.getId() > 0) {
 			entityManager.remove(category);
-			entityManager.getTransaction().commit();
-		} catch (IllegalStateException | IllegalArgumentException | PersistenceException e) {
-			entityManager.getTransaction().rollback();
-			logger.error("Error in method void delete(Category category): " + e.getMessage()
-					+ " from class exception name: " + e.getClass().getCanonicalName());
-			throw new DAOException("Error can't remove object on method void delete(Category category)", e);
+		} else {
+			throw new DAOException("Error can't remove object on method void delete(Category category)");
 		}
 	}
 
