@@ -6,7 +6,7 @@ public class WebDispatcherServletInitializer extends AbstractAnnotationConfigDis
 
 	@Override
 	protected Class<?>[] getRootConfigClasses() {
-		return null;
+		return new Class[] {SpringServiceConfig.class, SpringPersistenceConfig.class};
 	}
 
 	@Override
