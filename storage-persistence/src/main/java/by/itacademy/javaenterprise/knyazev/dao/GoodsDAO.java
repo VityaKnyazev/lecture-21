@@ -62,7 +62,7 @@ public class GoodsDAO implements DAO<Good>{
 	public List<Good> findAll() {
 
 		try {
-			return entityManager.createNamedQuery("goods", Good.class).getResultList();
+			return entityManager.createNamedQuery("allGoods", Good.class).getResultList();
 		} catch (IllegalStateException | IllegalArgumentException | PersistenceException e) {
 			logger.error("Error in method List<Good> findAll(): " + e.getMessage() + " from class exception name: "
 					+ e.getClass().getCanonicalName(), e);

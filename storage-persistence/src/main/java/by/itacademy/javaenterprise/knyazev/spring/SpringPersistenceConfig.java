@@ -2,8 +2,6 @@ package by.itacademy.javaenterprise.knyazev.spring;
 
 import java.util.Properties;
 
-import javax.persistence.EntityManagerFactory;
-
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.ComponentScan;
@@ -50,7 +48,7 @@ public class SpringPersistenceConfig {
 		LocalContainerEntityManagerFactoryBean entityManagerFactory = new LocalContainerEntityManagerFactoryBean();
 		entityManagerFactory.setDataSource(dataSource());
 		entityManagerFactory.setJpaVendorAdapter(new HibernateJpaVendorAdapter());
-		entityManagerFactory.setPackagesToScan("by.itacademy.javaenterprise.knyazev.embeddables, by.itacademy.javaenterprise.knyazev.entities");
+		entityManagerFactory.setPackagesToScan("by.itacademy.javaenterprise.knyazev.entities", "by.itacademy.javaenterprise.knyazev.embeddables");
 			
 		Properties jpaProperties = new Properties();
 		jpaProperties.put("hibernate.show_sql", env.getProperty("hibernate.show.sql"));

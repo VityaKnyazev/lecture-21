@@ -12,12 +12,12 @@
 
 <h2>What's done:</h2>
 <ol>
-<li></li>
-<li></li>
-<li></li>
-<li></li>
-<li></li>
-<li></li>
+<li>Git repo and best practices</li>
+<li>Based on #20</li>
+<li>Added DAO and hibernate tiers with spring integration</li>
+<li>Made all configurations in Java code (don't use xml)</li>
+<li>Deploid with tomcat server v. 9</li>
+<li>Changed module names: {project name}-module. Added child dependencies in parent pom.xml</li>
 </ol>
 
 <h3>To run App you should:</h3>

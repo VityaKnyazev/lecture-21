@@ -21,7 +21,7 @@ import lombok.NoArgsConstructor;
 @AllArgsConstructor
 @Entity
 @Table(name = "goods")
-@NamedNativeQuery(name= "goods", query = "SELECT id, name, sort, description, category_id, producer_id FROM goods")
+@NamedNativeQuery(name= "allGoods", query = "SELECT id, name, sort, description, category_id, producer_id FROM goods", resultClass = Good.class)
 public class Good {
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)

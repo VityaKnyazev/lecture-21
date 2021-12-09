@@ -14,6 +14,6 @@ import org.springframework.web.servlet.view.InternalResourceViewResolver;
 public class SpringMVCConfig {
 	@Bean
 	public InternalResourceViewResolver internalResourceViewResolver() {
-		return new InternalResourceViewResolver("/WEB-INF/views", ".jsp");		
+		return new InternalResourceViewResolver("/WEB-INF/views/", ".jsp");		
 	}	
 }
